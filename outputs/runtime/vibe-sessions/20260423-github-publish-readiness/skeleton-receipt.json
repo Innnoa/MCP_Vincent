@@ -1,0 +1,17 @@
+{
+  "run_id": "20260423-github-publish-readiness",
+  "date": "2026-04-23",
+  "stage": "skeleton_check",
+  "status": "completed",
+  "summary": {
+    "repo_has_commits": false,
+    "primary_plugin": "fastaicode-image-mcp",
+    "missing_publish_files": [
+      "README.md",
+      ".gitignore",
+      ".github/workflows/ci.yml",
+      "fastaicode-image-mcp/README.md"
+    ],
+    "publish_risk_found": "fastaicode-image-mcp/.mcp.json used machine-specific absolute paths"
+  }
+}

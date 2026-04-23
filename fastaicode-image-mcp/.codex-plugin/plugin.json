@@ -1,0 +1,30 @@
+{
+  "name": "fastaicode-image-mcp",
+  "version": "0.1.0",
+  "description": "Reusable local MCP plugin for FastAICode image generation.",
+  "license": "UNLICENSED",
+  "keywords": [
+    "mcp",
+    "images",
+    "fastaicode"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "FastAICode Image MCP",
+    "shortDescription": "Generate images and save local PNG files.",
+    "longDescription": "Provides a local MCP tool for FastAICode-compatible image generation with standardized presets, decoding, and file output.",
+    "developerName": "Vincent Workspace",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Generate a product mockup image and save it locally.",
+      "Create an illustration with the FastAICode image tool.",
+      "Render an image at 1k and return the saved path."
+    ],
+    "brandColor": "#C2410C"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "run_id": "20260423-github-publish-readiness",
+  "stage": "plan_execute",
+  "status": "completed",
+  "artifacts_written": [
+    "README.md",
+    ".gitignore",
+    "LICENSE",
+    ".github/workflows/ci.yml",
+    "fastaicode-image-mcp/README.md",
+    "fastaicode-image-mcp/.env.example",
+    "fastaicode-image-mcp/.mcp.json",
+    "fastaicode-image-mcp/.codex-plugin/plugin.json",
+    "fastaicode-image-mcp/tests/test_plugin_layout.py",
+    "CURRENT_TASK.md",
+    "DECISIONS.md"
+  ],
+  "key_changes": [
+    "added root-level publication docs",
+    "made MCP registration config portable",
+    "documented deployment and current MCP structure",
+    "added GitHub Actions test workflow"
+  ]
+}

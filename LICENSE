@@ -1,0 +1,10 @@
+This repository is currently marked as UNLICENSED.
+
+Before making the repository public for third-party reuse, replace this file
+with the full text of the license you actually want to grant, then update:
+
+- README.md
+- fastaicode-image-mcp/.codex-plugin/plugin.json
+
+Common choices include MIT and Apache-2.0, but the final choice should be made
+by the repository owner.

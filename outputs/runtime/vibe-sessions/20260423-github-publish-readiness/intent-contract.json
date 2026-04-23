@@ -1,0 +1,32 @@
+{
+  "run_id": "20260423-github-publish-readiness",
+  "date": "2026-04-23",
+  "goal": "Prepare the repository for GitHub publication and reuse.",
+  "deliverable": [
+    "root README and gitignore",
+    "plugin README and env example",
+    "portable mcp registration config",
+    "CI workflow",
+    "runtime receipts for this publish-readiness pass"
+  ],
+  "constraints": [
+    "do not change tool names",
+    "do not add new runtime dependencies",
+    "do not assume a final open-source license choice"
+  ],
+  "acceptance_criteria": [
+    "repository explains current MCP structure and deployment",
+    "machine-specific paths are removed from committed MCP config",
+    "pytest fastaicode-image-mcp/tests -v passes"
+  ],
+  "non_goals": [
+    "new image features",
+    "module refactors",
+    "license selection on behalf of the owner"
+  ],
+  "autonomy_mode": "single-agent",
+  "assumptions": [
+    "source deployment is acceptable for the first public GitHub version",
+    "a placeholder UNLICENSED file is safer than selecting a legal license without owner approval"
+  ]
+}

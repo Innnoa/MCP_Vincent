@@ -1,0 +1,10 @@
+{
+  "run_id": "20260423-github-publish-readiness",
+  "stage": "requirement_doc",
+  "status": "completed",
+  "artifact": "docs/requirements/2026-04-23-github-publish-readiness.md",
+  "notes": [
+    "captured publish-readiness scope",
+    "kept license choice as an explicit non-goal"
+  ]
+}

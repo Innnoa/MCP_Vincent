@@ -1,0 +1,8 @@
+interface:
+  display_name: "Fastaicode Image"
+  short_description: "Use the local image MCP to generate PNG files"
+  brand_color: "#C2410C"
+  default_prompt: "Use $fastaicode-image to turn an image request into a generate_image tool call."
+
+policy:
+  allow_implicit_invocation: true

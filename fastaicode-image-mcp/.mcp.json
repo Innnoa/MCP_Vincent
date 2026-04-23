@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "fastaicode-image": {
+      "command": "python3",
+      "args": [
+        "./server/mcp_server.py"
+      ]
+    }
+  }
+}
