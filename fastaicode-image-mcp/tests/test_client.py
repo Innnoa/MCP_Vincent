@@ -2,7 +2,12 @@ import base64
 
 import httpx
 
-from server.client import FastAIImageClient, decode_and_save_png, parse_generation_payload
+from server.client import (
+    FastAIImageClient,
+    build_request_timeout,
+    decode_and_save_png,
+    parse_generation_payload,
+)
 
 
 def test_parse_generation_payload_reads_b64_json() -> None:
@@ -62,6 +67,47 @@ def test_http_client_posts_expected_payload() -> None:
     assert captured["url"] == "http://new.fastaicode.top/v1/images/generations"
     assert captured["auth"] == "Bearer secret"
     assert '"size":"1024x1024"' in captured["body"]
+
+
+def test_generate_uses_fine_grained_timeout_object() -> None:
+    captured: dict = {}
+
+    class FakeHTTPClient:
+        def post(self, *args, **kwargs) -> httpx.Response:
+            captured["timeout"] = kwargs["timeout"]
+            return httpx.Response(
+                200,
+                request=httpx.Request("POST", args[0]),
+                json={"created": 1, "data": [{"b64_json": "cG5nLWJ5dGVz"}]},
+            )
+
+    client = FastAIImageClient(http_client=FakeHTTPClient())
+
+    client.generate(
+        base_url="http://new.fastaicode.top",
+        api_key="secret",
+        model="gpt-image-2",
+        prompt="red circle",
+        response_format="b64_json",
+        size="1024x1024",
+        timeout_seconds=300,
+    )
+
+    timeout = captured["timeout"]
+    assert isinstance(timeout, httpx.Timeout)
+    assert timeout.read == 300
+    assert timeout.write == 60
+    assert timeout.connect == 10
+    assert timeout.pool == 10
+
+
+def test_build_request_timeout_caps_non_read_timeouts() -> None:
+    timeout = build_request_timeout(300)
+
+    assert timeout.read == 300
+    assert timeout.write == 60
+    assert timeout.connect == 10
+    assert timeout.pool == 10
 
 
 def test_http_client_posts_multipart_edit_request(tmp_path) -> None:

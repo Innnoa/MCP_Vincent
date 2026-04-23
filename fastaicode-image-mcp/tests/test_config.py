@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from server.config import load_settings, resolve_size_preset
 
 
@@ -25,6 +27,27 @@ auto = "auto"
     assert settings.size_preset_mapping["1k"] == "1024x1024"
 
 
+def test_missing_timeout_uses_longer_default(tmp_path, monkeypatch) -> None:
+    config_file = tmp_path / "config.toml"
+    config_file.write_text(
+        """
+base_url = "http://from-file.example"
+default_model = "gpt-image-2"
+default_output_dir = "outputs/images"
+
+[size_preset_mapping]
+one_k = "1024x1024"
+auto = "auto"
+        """.strip(),
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("FASTAICODE_API_KEY", "secret")
+
+    settings = load_settings(config_file)
+
+    assert settings.request_timeout_seconds == 300
+
+
 def test_resolve_four_k_requires_explicit_mapping() -> None:
     mapping = {
         "1k": "1024x1024",
@@ -38,3 +61,12 @@ def test_resolve_four_k_requires_explicit_mapping() -> None:
         assert "4k" in str(exc)
     else:
         raise AssertionError("expected ValueError")
+
+
+def test_shipped_config_uses_longer_generation_timeout(monkeypatch) -> None:
+    config_file = Path(__file__).resolve().parents[1] / "fastaicode-image-mcp.toml"
+    monkeypatch.setenv("FASTAICODE_API_KEY", "secret")
+
+    settings = load_settings(config_file)
+
+    assert settings.request_timeout_seconds >= 300

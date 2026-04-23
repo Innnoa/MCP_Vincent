@@ -9,6 +9,16 @@ import httpx
 from server.models import ParsedImageResponse
 
 
+def build_request_timeout(read_timeout_seconds: float) -> httpx.Timeout:
+    bounded_timeout = max(float(read_timeout_seconds), 0.1)
+    return httpx.Timeout(
+        read=bounded_timeout,
+        write=min(bounded_timeout, 60.0),
+        connect=min(bounded_timeout, 10.0),
+        pool=min(bounded_timeout, 10.0),
+    )
+
+
 class FastAIImageClient:
     def __init__(self, http_client: httpx.Client | None = None) -> None:
         self._http_client = http_client or httpx.Client()
@@ -39,7 +49,7 @@ class FastAIImageClient:
                 "Content-Type": "application/json",
             },
             content=json.dumps(body, separators=(",", ":")),
-            timeout=timeout_seconds,
+            timeout=build_request_timeout(timeout_seconds),
         )
         response.raise_for_status()
         return response.json()
@@ -71,7 +81,7 @@ class FastAIImageClient:
                 files={
                     "image": (image_path.name, image_file, "image/png"),
                 },
-                timeout=timeout_seconds,
+                timeout=build_request_timeout(timeout_seconds),
             )
         response.raise_for_status()
         return response.json()

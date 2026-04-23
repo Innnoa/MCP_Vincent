@@ -37,7 +37,7 @@
 
 2. `.mcp.json`
    - MCP host 读取的本地 server 注册文件
-   - 当前默认使用 `python3 ./server/mcp_server.py`
+   - 当前默认使用 `python3 ./fastaicode-image-mcp/server/mcp_server.py`
 
 3. `server/`
    - `mcp_server.py`：MCP / JSON-RPC 入口，处理 `initialize`、`ping`、`tools/list`、`tools/call`
@@ -78,9 +78,9 @@ pytest tests -v
 3. 设置 `FASTAICODE_API_KEY`
 4. 让 MCP host 指向 `fastaicode-image-mcp/.mcp.json`
 
-如果你的 MCP host 会以插件目录作为工作目录启动 server，当前 `.mcp.json` 可以直接使用。
+如果你的 MCP host 会以当前仓库根目录作为工作目录启动 server，当前 `.mcp.json` 可以直接使用。
 
-如果你的 MCP host 不会以插件目录作为工作目录启动，请把 `fastaicode-image-mcp/.mcp.json` 里的 `./server/mcp_server.py` 改成你本机上的绝对路径；这类本地路径差异建议只在本机改，不要直接提交回 GitHub。
+如果你的 MCP host 不会以当前仓库根目录作为工作目录启动，请把 `fastaicode-image-mcp/.mcp.json` 里的 `./fastaicode-image-mcp/server/mcp_server.py` 改成你本机上的绝对路径；这类本地路径差异建议只在本机改，不要直接提交回 GitHub。
 
 更完整的工具参数、目录说明和调用示例见 `fastaicode-image-mcp/README.md`。
 

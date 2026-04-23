@@ -17,4 +17,14 @@ def test_mcp_server_registration_is_portable() -> None:
     server = data["mcpServers"]["fastaicode-image"]
 
     assert server["command"] == "python3"
-    assert server["args"] == ["./server/mcp_server.py"]
+    assert server["args"] == ["./fastaicode-image-mcp/server/mcp_server.py"]
+
+
+def test_mcp_server_registration_points_to_existing_script_from_workspace_root() -> None:
+    workspace_root = Path(__file__).resolve().parents[2]
+    config_file = workspace_root / "fastaicode-image-mcp" / ".mcp.json"
+    data = json.loads(config_file.read_text(encoding="utf-8"))
+    server = data["mcpServers"]["fastaicode-image"]
+    script_path = workspace_root / server["args"][0]
+
+    assert script_path.exists()

@@ -39,8 +39,9 @@ fastaicode-image-mcp/
 ### `.mcp.json`
 
 - 注册本地 MCP server
-- 当前默认入口是 `python3 ./server/mcp_server.py`
-- 如果宿主不是从本目录启动，可能需要把相对路径改成绝对路径
+- 当前默认入口是 `python3 ./fastaicode-image-mcp/server/mcp_server.py`
+- 当前配置默认假定宿主从仓库根目录启动
+- 如果宿主不是从仓库根目录启动，可能需要把相对路径改成绝对路径
 
 ### `server/mcp_server.py`
 
@@ -111,6 +112,7 @@ set +a
 2. 配置 `FASTAICODE_API_KEY`
 3. 保持当前目录结构不变
 4. 让宿主加载本目录的 `.mcp.json`
+5. 确认宿主工作目录是仓库根目录
 
 当前 `.mcp.json` 内容：
 
@@ -120,7 +122,7 @@ set +a
     "fastaicode-image": {
       "command": "python3",
       "args": [
-        "./server/mcp_server.py"
+        "./fastaicode-image-mcp/server/mcp_server.py"
       ]
     }
   }

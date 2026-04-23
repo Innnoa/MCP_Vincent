@@ -1,7 +1,7 @@
 base_url = "http://new.fastaicode.top"
 default_model = "gpt-image-2"
 default_output_dir = "outputs/images"
-request_timeout_seconds = 60
+request_timeout_seconds = 300
 
 [size_preset_mapping]
 one_k = "1024x1024"

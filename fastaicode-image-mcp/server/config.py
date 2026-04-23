@@ -35,7 +35,7 @@ def load_settings(config_file: Path) -> Settings:
         default_model=raw.get("default_model", "gpt-image-2"),
         default_output_dir=output_dir,
         size_preset_mapping=mapping,
-        request_timeout_seconds=float(raw.get("request_timeout_seconds", 60)),
+        request_timeout_seconds=float(raw.get("request_timeout_seconds", 300)),
     )
 
 
