@@ -43,6 +43,8 @@ def test_http_client_posts_expected_payload() -> None:
         captured["url"] = str(request.url)
         captured["auth"] = request.headers["Authorization"]
         captured["content_type"] = request.headers["Content-Type"]
+        captured["accept"] = request.headers["Accept"]
+        captured["user_agent"] = request.headers["User-Agent"]
         captured["body"] = request.read().decode("utf-8")
         return httpx.Response(
             200,
@@ -66,6 +68,8 @@ def test_http_client_posts_expected_payload() -> None:
     assert payload["created"] == 1
     assert captured["url"] == "http://new.fastaicode.top/v1/images/generations"
     assert captured["auth"] == "Bearer secret"
+    assert captured["accept"] == "application/json"
+    assert "Mozilla/5.0" in captured["user_agent"]
     assert '"size":"1024x1024"' in captured["body"]
 
 
@@ -110,6 +114,39 @@ def test_build_request_timeout_caps_non_read_timeouts() -> None:
     assert timeout.pool == 10
 
 
+def test_generate_surfaces_upstream_permission_message() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            403,
+            request=request,
+            json={
+                "error": {
+                    "message": "This group does not allow image generation",
+                    "type": "permission_error",
+                }
+            },
+        )
+
+    transport = httpx.MockTransport(handler)
+    http_client = httpx.Client(transport=transport)
+    client = FastAIImageClient(http_client=http_client)
+
+    try:
+        client.generate(
+            base_url="http://new.fastaicode.top",
+            api_key="secret",
+            model="gpt-image-2",
+            prompt="red circle",
+            response_format="b64_json",
+            size="1024x1024",
+            timeout_seconds=30,
+        )
+    except httpx.HTTPStatusError as exc:
+        assert "This group does not allow image generation" in str(exc)
+    else:
+        raise AssertionError("expected HTTPStatusError")
+
+
 def test_http_client_posts_multipart_edit_request(tmp_path) -> None:
     captured: dict = {}
     image_path = tmp_path / "input.png"
@@ -119,6 +156,8 @@ def test_http_client_posts_multipart_edit_request(tmp_path) -> None:
         captured["url"] = str(request.url)
         captured["auth"] = request.headers["Authorization"]
         captured["content_type"] = request.headers["Content-Type"]
+        captured["accept"] = request.headers["Accept"]
+        captured["user_agent"] = request.headers["User-Agent"]
         captured["body"] = request.read()
         return httpx.Response(
             200,
@@ -142,6 +181,8 @@ def test_http_client_posts_multipart_edit_request(tmp_path) -> None:
     assert payload["created"] == 2
     assert captured["url"] == "http://new.fastaicode.top/v1/images/edits"
     assert captured["auth"] == "Bearer secret"
+    assert captured["accept"] == "application/json"
+    assert "Mozilla/5.0" in captured["user_agent"]
     assert "multipart/form-data" in captured["content_type"]
     assert b'turn this into a blue icon' in captured["body"]
     assert b'1024x1024' in captured["body"]

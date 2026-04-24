@@ -8,6 +8,14 @@ import httpx
 
 from server.models import ParsedImageResponse
 
+DEFAULT_REQUEST_HEADERS = {
+    "Accept": "application/json",
+    "User-Agent": (
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+    ),
+}
+
 
 def build_request_timeout(read_timeout_seconds: float) -> httpx.Timeout:
     bounded_timeout = max(float(read_timeout_seconds), 0.1)
@@ -45,13 +53,14 @@ class FastAIImageClient:
         response = self._http_client.post(
             f"{base_url.rstrip('/')}/v1/images/generations",
             headers={
+                **DEFAULT_REQUEST_HEADERS,
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
             },
             content=json.dumps(body, separators=(",", ":")),
             timeout=build_request_timeout(timeout_seconds),
         )
-        response.raise_for_status()
+        _raise_for_status_with_body(response)
         return response.json()
 
     def edit(
@@ -75,6 +84,7 @@ class FastAIImageClient:
             response = self._http_client.post(
                 f"{base_url.rstrip('/')}/v1/images/edits",
                 headers={
+                    **DEFAULT_REQUEST_HEADERS,
                     "Authorization": f"Bearer {api_key}",
                 },
                 data=data,
@@ -83,7 +93,7 @@ class FastAIImageClient:
                 },
                 timeout=build_request_timeout(timeout_seconds),
             )
-        response.raise_for_status()
+        _raise_for_status_with_body(response)
         return response.json()
 
 
@@ -104,3 +114,28 @@ def parse_generation_payload(payload: dict) -> ParsedImageResponse:
 def decode_and_save_png(image_bytes: bytes, target_path: Path) -> None:
     target_path.parent.mkdir(parents=True, exist_ok=True)
     target_path.write_bytes(image_bytes)
+
+
+def _raise_for_status_with_body(response: httpx.Response) -> None:
+    try:
+        response.raise_for_status()
+    except httpx.HTTPStatusError as exc:
+        detail = _extract_error_message(response)
+        if detail:
+            message = f"{exc}\nUpstream error: {detail}"
+            raise httpx.HTTPStatusError(message, request=exc.request, response=exc.response) from exc
+        raise
+
+
+def _extract_error_message(response: httpx.Response) -> str | None:
+    try:
+        payload = response.json()
+    except ValueError:
+        return None
+
+    error = payload.get("error")
+    if isinstance(error, dict):
+        message = error.get("message")
+        if isinstance(message, str) and message.strip():
+            return message.strip()
+    return None
