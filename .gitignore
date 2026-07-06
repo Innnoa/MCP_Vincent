@@ -22,3 +22,8 @@ venv/
 fastaicode-image-mcp/outputs/images/
 outputs/images/
 fastaicode-image-mcp/.mcp.local.json
+
+# AI / goal-runner artifacts
+GOAL_STATE.json
+outputs/goal-runner/
+outputs/runtime/
