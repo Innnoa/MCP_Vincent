@@ -54,7 +54,7 @@
 ## 快速开始
 
 ```bash
-git clone <your-repo-url>
+git clone git@github.com:Innnoa/MCP_Vincent.git
 cd Vincent/fastaicode-image-mcp
 python3 -m venv .venv
 source .venv/bin/activate
@@ -68,6 +68,15 @@ pytest tests -v
 ```
 
 默认配置文件是 `fastaicode-image-mcp/fastaicode-image-mcp.toml`。如果你要改接口地址、默认模型或默认输出目录，直接修改这个文件即可。
+
+## 示例
+
+| 文生图 (`generate_image`) | 文生图 (`generate_image`) |
+|:---:|:---:|
+| ![fox logo](docs/screenshots/example-fox-logo.png) | ![rubber duck](docs/screenshots/example-rubber-duck.png) |
+| *orange fox logo* | *cute rubber duck* |
+
+更多参数说明见 `fastaicode-image-mcp/README.md`。
 
 ## 部署方式
 
@@ -84,12 +93,11 @@ pytest tests -v
 
 更完整的工具参数、目录说明和调用示例见 `fastaicode-image-mcp/README.md`。
 
-## 上传 GitHub 前建议确认
+## 本地验证
 
-- 选择并替换根目录 `LICENSE`
-- 根据你的实际仓库地址更新 README 中的 clone 地址
-- 先本地执行一次 `pytest fastaicode-image-mcp/tests -v`
-- 如果公开仓库不需要保留生成图片，保持 `.gitignore` 当前规则即可
+```bash
+pytest fastaicode-image-mcp/tests -v
+```
 
 ## 当前限制
 
