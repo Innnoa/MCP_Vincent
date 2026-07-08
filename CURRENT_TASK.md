@@ -31,7 +31,15 @@
 - `.mcp.json` 已改为相对路径写法，去掉当前机器绝对路径
 - `pytest fastaicode-image-mcp/tests -v` 已通过
 - `python3 fastaicode-image-mcp/server/mcp_server.py` 已验证可在无输入时正常退出
-- 首个提交已创建并推送到 `origin/main`
+- LICENSE 已选定 MIT，已提交
+- `.mcp.json` 路径确认：仓库模板使用相对路径，宿主 opencode.json 使用绝对路径，两种方式 README 均已文档化
+- 仓库 description、topics（mcp, image-generation, fastaicode, python, mcp-server）已设置
+- v1.0.0 Release 已更新，含详细说明和示例截图
+- 根级 README 已补充示例截图、更新 clone 地址
+- `docs/screenshots/` 已包含两张示例图片
+- 最终提交已推送到 `origin/main`
+
+## 状态：已完成
 
 ## 相关文件
 
@@ -45,6 +53,4 @@
 
 ## 下一步
 
-1. 选择最终许可证并替换根目录 `LICENSE`
-2. 按实际宿主环境确认 `.mcp.json` 是否需要切换为绝对路径
-3. 如需公开给他人复用，可再补仓库标签、Release 和示例截图
+（全部完成，无待办项）
